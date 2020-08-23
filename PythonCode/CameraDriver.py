@@ -30,8 +30,11 @@ class Camera(object):
         maxdiff = 0
         zone = None
         for i, (zone_x, zone_y) in enumerate(cfg.TAC_BOX_CENTERS):
+            print(zone_x - cfg.TAC_BOX_X, zone_x + cfg.TAC_BOX_X, zone_y - cfg.TAC_BOX_Y, zone_y + cfg.TAC_BOX_Y)
             newimg_crop = processed_img_new[zone_x - cfg.TAC_BOX_X:zone_x + cfg.TAC_BOX_X, zone_y - cfg.TAC_BOX_Y:zone_y + cfg.TAC_BOX_Y]
             oldimg_crop = self.pre_move_img[zone_x - cfg.TAC_BOX_X:zone_x + cfg.TAC_BOX_X, zone_y - cfg.TAC_BOX_Y:zone_y + cfg.TAC_BOX_Y]
+            debug_save_img(newimg_crop, 'newimg_crop.jpg')
+            debug_save_img(oldimg_crop, 'oldimg_crop.jpg')
             zonediff = np.sum(cv2.absdiff(newimg_crop, oldimg_crop))
 
             print(zonediff)
