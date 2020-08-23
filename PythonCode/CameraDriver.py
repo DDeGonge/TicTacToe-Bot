@@ -17,13 +17,14 @@ class Camera(object):
         self.camera = None
         self.resolution = resolution
         self.pre_move_img = None
+        self.is_enabled = False
 
     def locate_user_move_prep(self):
-        image = self._capture_image(enable_and_disable)
+        image = self._capture_image()
         self.pre_move_img = self.preprocess_image(image)
 
     def locate_user_move(self, free_spaces):
-        image = self._capture_image(enable_and_disable)
+        image = self._capture_image()
         processed_img_new = self.preprocess_image(image)
 
         maxdiff = 0
@@ -39,13 +40,11 @@ class Camera(object):
 
         return zone
 
-    def _capture_image(self, enable_and_disable=False):
-        if enable_and_disable:
+    def _capture_image(self):
+        if not self.is_enabled:
             self.start_camera()
         rawCapture = PiRGBArray(self.camera)
         self.camera.capture(rawCapture, format="bgr")
-        if enable_and_disable:
-            self.stop_camera()
         return rawCapture.array
 
     @staticmethod
@@ -60,6 +59,7 @@ class Camera(object):
     def start_camera(self):
         self.camera = PiCamera()
         self.configure_camera()
+        self.is_enabled = True
 
     def configure_camera(self):
         self.camera.rotation = cfg.IMAGE_ROTATION_DEGS
@@ -68,6 +68,7 @@ class Camera(object):
 
     def stop_camera(self):
         self.camera.close()
+        self.is_enabled = False
 
     """ Image recognition functions """
 
@@ -96,8 +97,9 @@ class Camera(object):
 
 if __name__=='__main__':
     c = Camera()
-    card = c.read_card(enable_and_disable=True)
-    print(card.rank, card.suit)
+    image = c._capture_image()
+    proc_img = c.preprocess_image(image)
+    debug_save_img(proc_img, 'post_proc_img.jpg')
 
 
 def debug_save_img(img, imgname):
