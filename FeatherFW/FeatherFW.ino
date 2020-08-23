@@ -74,8 +74,20 @@ void loop()
               Serial.println("TODO homing");
               break;
             }
+            case 90: {
+              // Absolute positioning
+              bot.set_pos_mode(true);
+              break;
+            }
+            case 91: {
+              // Relative positioning
+              bot.set_pos_mode(false);
+              break;
+            }
             case 92: {
-              bot.zero();
+              // This is implemented wrong currently but idc deal with it
+              gcode_command_floats gcode(args);
+              bot.zero(gcode.fetch('x'), gcode.fetch('y'));
               break;
             }
           }

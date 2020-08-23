@@ -25,11 +25,11 @@ class TacBoard(object):
             ret_vec += [True if v == 0 else False for v in row]
         return ret_vec
 
-    def user_move(self, xindex, yindex):
-        self.board[xindex, yindex] = -1
+    def user_move(self, user_move_index):
+        self.board[math.floor(user_move_index / 3), user_move_index % 3] = -1
 
-    def bot_move(self, xindex, yindex):
-        self.board[xindex, yindex] = 1
+    def bot_move(self, botmove):
+        self.board[botmove.x, botmove.y] = 1
 
     def get_best_move(self):
         return self._calc_move(self.board, 1)

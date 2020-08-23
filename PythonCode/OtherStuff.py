@@ -17,17 +17,19 @@ def standard_game(scarabot, cam, bot_first: bool):
         if turn % 2 == 0:
             # Bot turn
             bot_best_move = game.get_best_move()
-            game.bot_move(bot_best_move.x, bot_best_move.y)
-            Scara.draw_move()
+            game.bot_move(bot_best_move)
+            Scara.draw_move(bot_best_move)
         else:
             # Player turn
             cam.locate_user_move_prep()
             _ = input('Press enter after moved. TODO auto detect this or something idk...')
             user_move_index = cam.locate_user_move()
-            game.user_move(math.floor(user_move_index / 3), user_move_index % 3)
+            game.user_move(user_move_index)
 
         if game.win_check != 0:
             break
+
+        turn += 1
 
 
 def meme_game(scarabot, cam, bot_first: bool):

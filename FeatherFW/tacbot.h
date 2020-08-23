@@ -50,31 +50,32 @@ struct scara_bot
   void configure(float arm0_mm_new, float arm1_mm_new, float s0_spr_new, float s1_spr_new, float x0_off_new, float y0_off_new);
   void enable_motors(bool x, bool y);
   void disable_motors(bool x, bool y);
-  void zero();
+  void zero(float x_target_mm, float y_target_mm);
   void move_motor_linear(float x_target_mm, float y_target_mm, float v_max);
   void move_motor_arc(float x_target_mm, float y_target_mm, float ival, float jval, float v_max, bool cw);
   void set_def_speeds(float new_accel, float new_vel);
   void get_pos(float &xpos_mm, float &ypos_mm);
+  void set_pos_mode(bool abs_true);
 
   void debug_print();
 
   private:
+  double cos_solve(float l1, float l2, float l3);
+  void ik_solve(float xtar_mm, float ytar_mm, float &theta0, float &theta1);
+
   stepper s0;
   stepper s1;
-  float xpos_mm = 0;
-  float ypos_mm = 0;
   Servo p_servo;
 
+  bool absmode = true;
+  float xpos_mm = 0;
+  float ypos_mm = 0;
   float def_accel = 500;
   float def_vel = 6000;
-
   float arm0_mm = 100.5;
   float arm1_mm = 90;
   float x0_offset_mm = 25;
   float y0_offset_mm = 135;
-
-  double cos_solve(float l1, float l2, float l3);
-  void ik_solve(float xtar_mm, float ytar_mm);
 };
 
 struct gcode_command_floats
@@ -84,8 +85,11 @@ struct gcode_command_floats
   public:
   float fetch(char com_key);
   bool com_exists(char com_key);
+  
 
   private:
+  void parse_float(string inpt, char &cmd, float &value);
+
   vector<char> commands;
   vector<float> values;
 };

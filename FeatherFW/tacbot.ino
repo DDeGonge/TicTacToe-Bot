@@ -161,10 +161,17 @@ void scara_bot::disable_motors(bool x, bool y)
     s1.disable();
 }
 
-void scara_bot::zero()
+void scara_bot::zero(float x_target_mm, float y_target_mm)
 {
-  s0.set_zero_rads(PI);
-  s1.set_zero_rads(2*PI);
+  x_target_mm = x_target_mm == NOVALUE ? 0.0 : x_target_mm;
+  y_target_mm = y_target_mm == NOVALUE ? 0.0 : y_target_mm;
+
+  float t0, t1;
+  ik_solve(x_target_mm, y_target_mm, t0, t1);
+  s0.set_zero_rads(t0);
+  s1.set_zero_rads(t1);
+//  s0.set_zero_rads(PI);
+//  s1.set_zero_rads(2*PI);
 }
 
 void scara_bot::move_motor_linear(float x_target_mm, float y_target_mm, float v_max)
@@ -178,6 +185,13 @@ void scara_bot::move_motor_linear(float x_target_mm, float y_target_mm, float v_
   x_target_mm = x_target_mm == NOVALUE ? x_start : x_target_mm;
   y_target_mm = y_target_mm == NOVALUE ? y_start : y_target_mm;
   float accel = def_accel;
+
+  // If relative mode, do that
+  if (absmode == false)
+  {
+    x_target_mm += x_start;
+    y_target_mm += y_start;
+  }
 
   // Calculate some basic move statistics
   float move_dist_mm = sqrt(pow(x_target_mm - x_start, 2) + pow(y_target_mm - y_start, 2));
@@ -229,7 +243,10 @@ void scara_bot::move_motor_linear(float x_target_mm, float y_target_mm, float v_
     xtar_mm = x_start + move_percent * (x_target_mm - x_start);
     ytar_mm = y_start + move_percent * (y_target_mm - y_start);
 
-    ik_solve(xtar_mm, ytar_mm);
+    float t0, t1;
+    ik_solve(xtar_mm, ytar_mm, t0, t1);
+    s0.set_rad_target(t0);
+    s1.set_rad_target(t1);
 
     bool stepped = false;
     stepped = s0.step_if_needed() ? true : stepped;
@@ -243,74 +260,7 @@ void scara_bot::move_motor_linear(float x_target_mm, float y_target_mm, float v_
 
 void scara_bot::move_motor_arc(float x_target_mm, float y_target_mm, float ival, float jval, float v_max, bool cw)
 {
-  // populate default velocity if none
-  v_max = v_max == NOVALUE ? def_vel : v_max / 60;
-  float accel = def_accel;
-
-  // Calculate some basic move statistics
-  float move_dist_mm = sqrt(pow(x_target_mm - xpos_mm, 2) + pow(y_target_mm - ypos_mm, 2));
-  float accel_dist_mm = pow(v_max, 2) / (2 * accel);
-
-  if(move_dist_mm < (2 * accel_dist_mm))
-  {
-    accel_dist_mm = move_dist_mm / 2;
-  }
-  float inflect_t0_s = sqrt((2 * accel_dist_mm) / accel);
-  float inflect_t1_s = inflect_t0_s + (move_dist_mm - (2 * accel_dist_mm)) / v_max;
-  float move_time_s = inflect_t1_s + inflect_t0_s;
-
-  // Calculate when to take steps on the fly like a boss
-  float x_start = xpos_mm;
-  float y_start = ypos_mm;
-  uint8_t motion_state = 0; // 0: accelerating, 1: plateau, 2: decelerating, 3: finalize
-  uint32_t t_start = micros();
-  uint32_t t_step;
-
-  float linear_dist_mm, t_elapsed_s, move_percent, xtar_mm, ytar_mm;
-  while(true)
-  {
-    t_step = micros();
-    t_elapsed_s = t_step - t_start;
-    t_elapsed_s /= 1000000;
-
-    switch(motion_state)
-    {
-      case 0: {
-        linear_dist_mm = (accel * pow(t_elapsed_s, 2)) / 2;
-        if(t_elapsed_s > inflect_t0_s) motion_state++;
-        break;
-      }
-      case 1: {
-        linear_dist_mm = accel_dist_mm + v_max * (t_elapsed_s - inflect_t0_s);
-        if(t_elapsed_s > inflect_t1_s) motion_state++;
-        break;
-      }
-      case 2: {
-        linear_dist_mm = move_dist_mm - ((accel * pow(move_time_s - t_elapsed_s, 2)) / 2);
-        if(t_elapsed_s > move_time_s) motion_state++;
-        break;
-      }
-      case 3: {
-        linear_dist_mm = move_dist_mm;
-        break;
-      }
-    }
-    move_percent = linear_dist_mm / move_dist_mm;
-    xtar_mm = x_start + move_percent * (x_target_mm - x_start);
-    ytar_mm = y_start + move_percent * (y_target_mm - y_start);
-
-    ik_solve(xtar_mm, ytar_mm);
-
-    bool stepped = false;
-    stepped = s0.step_if_needed() ? true : stepped;
-    stepped = s1.step_if_needed() ? true : stepped;
-
-    debug_print();
-
-    delay(10);
-
-    if(motion_state == 3 && !stepped) break;
-  }
+  
 }
 
 double scara_bot::cos_solve(float l1, float l2, float l3)
@@ -320,7 +270,7 @@ double scara_bot::cos_solve(float l1, float l2, float l3)
   return acos(output);
 }
 
-void scara_bot::ik_solve(float xtar_mm, float ytar_mm)
+void scara_bot::ik_solve(float xtar_mm, float ytar_mm, float &theta0, float &theta1)
 {
   float x_shifted = xtar_mm - x0_offset_mm;
   float y_shifted = ytar_mm - y0_offset_mm;
@@ -328,8 +278,15 @@ void scara_bot::ik_solve(float xtar_mm, float ytar_mm)
   float q2 = acos((pow(x_shifted, 2) + pow(y_shifted, 2) - pow(arm0_mm, 2) - pow(arm1_mm, 2)) / (2 * arm0_mm * arm1_mm));
   float q1 = atan2(y_shifted, x_shifted) + PI - atan((arm1_mm* sin(q2)) / (arm0_mm + arm1_mm*cos(q2)));
 
+  theta0 = PI - q1;
+  theta1 = (PI - q1) + (PI - q2);
   s0.set_rad_target(PI - q1);
   s1.set_rad_target((PI - q1) + (PI - q2));
+}
+
+void scara_bot::set_pos_mode(bool abs_true)
+{
+  absmode = abs_true;
 }
 
 void scara_bot::debug_print()
@@ -399,34 +356,7 @@ bool gcode_command_floats::com_exists(char com_key)
   return false;
 }
 
-
-
-/* GENERIC STUFF */
-
-void dwell_until_time(int32_t tar_time)
-{
-  while(micros() < tar_time);
-}
-
-int32_t solve_for_t_us(float v, float a, float d){
-  float t = -v;
-  if(v >= 0){
-    t += sqrt(pow(v, 2) + 2 * a * d);
-    t /= a;
-  }
-  else{
-    t -= sqrt(pow(v, 2) - 2 * a * d);
-    t /= a;
-  }
-  t *= 1000000;
-  t = (int32_t)(t - 1); // Subtract 1 to account for the time of the step pulse
-  if(t > 50000){
-    return 50000;
-  }
-  return t;
-}
-
-void parse_float(string inpt, char &cmd, float &value)
+void gcode_command_floats::parse_float(string inpt, char &cmd, float &value)
 {
   if (inpt.length() > 0)
   {

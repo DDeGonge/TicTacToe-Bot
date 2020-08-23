@@ -50,6 +50,9 @@ class Scara(object):
     def relative_move(self, xtar_mm, ytar_mm, velocity_mmps=None):
         return self.absolute_move(xpos_mm + xtar_mm, ypos_mm + ytar_mm, velocity_mmps)
 
+    def draw_move(self, move):
+        print('TODO: {}, {}'.format(move.x, move.y))
+
     def send_gcode(self, filename):
         with open(os.path.join(cfg.gcode_folder, filename)) as f:
             while(True):
