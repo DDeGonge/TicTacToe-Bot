@@ -29,10 +29,12 @@ class Camera(object):
 
         maxdiff = 0
         zone = None
-        for i, (zone_x, zone_y) in enumerate(cfg.TAC_BOX_CENTERSTAC_BOX_CENTERS):
+        for i, (zone_x, zone_y) in enumerate(cfg.TAC_BOX_CENTERS):
             newimg_crop = processed_img_new[zone_x - cfg.TAC_BOX_X:zone_x + cfg.TAC_BOX_X, zone_y - cfg.TAC_BOX_Y:zone_y + cfg.TAC_BOX_Y]
             oldimg_crop = self.pre_move_img[zone_x - cfg.TAC_BOX_X:zone_x + cfg.TAC_BOX_X, zone_y - cfg.TAC_BOX_Y:zone_y + cfg.TAC_BOX_Y]
             zonediff = np.sum(cv2.absdiff(newimg_crop, oldimg_crop))
+
+            print(zonediff)
 
             if zonediff < maxdiff and free_spaces[i] == True and zonediff > cfg.MIN_CHANGE:
                 maxdiff = zonediff
@@ -60,6 +62,7 @@ class Camera(object):
         self.camera = PiCamera()
         self.configure_camera()
         self.is_enabled = True
+        time.sleep(0.1)
 
     def configure_camera(self):
         self.camera.rotation = cfg.IMAGE_ROTATION_DEGS
@@ -102,7 +105,7 @@ def debug_save_img(img, imgname):
 
 if __name__=='__main__':
     c = Camera()
-    image = c._capture_image()
-    debug_save_img(image, 'pre_proc_img.jpg')
-    proc_img = c.preprocess_image(image)
-    debug_save_img(proc_img, 'post_proc_img.jpg')
+    c.locate_user_move_prep()
+    _ = input('press enter to continue...')
+    result = c.locate_user_move([True]*9)
+    print(result)
