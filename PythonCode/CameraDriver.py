@@ -86,7 +86,7 @@ class Camera(object):
         if cfg.DEBUG_MODE:
             debug_save_img(blur_crop, 'transformed.jpg')
 
-        blur_crop_rot = np.rot90(blur_crop, k=2)
+        blur_crop_rot = cv2.rotate(blur_crop, cv2.ROTATE_180)
         if cfg.DEBUG_MODE:
             debug_save_img(blur_crop_rot, 'finalimg.jpg')
 
