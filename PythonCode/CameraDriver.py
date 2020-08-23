@@ -63,6 +63,7 @@ class Camera(object):
 
     def configure_camera(self):
         self.camera.rotation = cfg.IMAGE_ROTATION_DEGS
+        self.camera.resolution = self.resolution
         self.camera.exposure_mode = 'off'
 
     def stop_camera(self):
@@ -86,11 +87,7 @@ class Camera(object):
         if cfg.DEBUG_MODE:
             debug_save_img(blur_crop, 'transformed.jpg')
 
-        blur_crop_rot = cv2.rotate(blur_crop, cv2.ROTATE_180)
-        if cfg.DEBUG_MODE:
-            debug_save_img(blur_crop_rot, 'finalimg.jpg')
-
-        return blur_crop_rot
+        return blur_crop
 
     @staticmethod
     def load_offset_image(filepath, filename):
@@ -106,5 +103,6 @@ def debug_save_img(img, imgname):
 if __name__=='__main__':
     c = Camera()
     image = c._capture_image()
+    debug_save_img(image, 'pre_proc_img.jpg')
     proc_img = c.preprocess_image(image)
     debug_save_img(proc_img, 'post_proc_img.jpg')
