@@ -75,8 +75,11 @@ class TacBoard(object):
         return [Move(None, r, c) for r in range(3) for c in range(3) if board_array[r,c] == 0]
 
     @staticmethod
-    def win_check(board_array):
+    def win_check(board_array=None):
         """ Return 0 if no win, 1 if bot win, -1 if user win """
+        if board_array == None:
+            board_array = self.board
+
         def check_set(oneset):
             if sum(oneset) == -3:
                 return -1

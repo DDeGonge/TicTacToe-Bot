@@ -2,6 +2,7 @@ __version__ = '0.1.0'
 
 import Config as cfg
 import random
+import math
 from Gameplay import *
 from ScaraDriver import *
 
@@ -21,8 +22,13 @@ def standard_game(scarabot, cam, bot_first: bool):
         else:
             # Player turn
             cam.locate_user_move_prep()
+            _ = input('Press enter after moved. TODO auto detect this or something idk...')
+            user_move_index = cam.locate_user_move()
+            game.user_move(math.floor(user_move_index / 3), user_move_index % 3)
 
-            cam.locate_user_move()
+        if game.win_check != 0:
+            break
+
 
 def meme_game(scarabot, cam, bot_first: bool):
     draw_board()
