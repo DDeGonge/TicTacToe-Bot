@@ -63,7 +63,6 @@ class Camera(object):
 
     def configure_camera(self):
         self.camera.rotation = cfg.IMAGE_ROTATION_DEGS
-        self.camera.resolution = self.resolution
         self.camera.exposure_mode = 'off'
 
     def stop_camera(self):
@@ -87,7 +86,11 @@ class Camera(object):
         if cfg.DEBUG_MODE:
             debug_save_img(blur_crop, 'transformed.jpg')
 
-        return blur_crop
+        blur_crop_rot = np.rot90(blur_crop, k=2)
+        if cfg.DEBUG_MODE:
+            debug_save_img(blur_crop_rot, 'finalimg.jpg')
+
+        return blur_crop_rot
 
     @staticmethod
     def load_offset_image(filepath, filename):

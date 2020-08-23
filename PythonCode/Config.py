@@ -19,14 +19,14 @@ gcode_folder = 'gcode'
 
 
 """ CAMERA PARAMETERS """
-# Cropped region corner points
+# Cropped region corner points, consider rotation plz
 p0 = [28, 38] # TL
 p1 = [575, 33] # TR
 p2 = [120, 410] # BL
 p3 = [488, 408] # BR
 
 IMAGE_RESOLUTION = (648,486)
-IMAGE_ROTATION_DEGS = 0
+IMAGE_ROTATION_DEGS = 180
 
 POST_TRANSFORM_RES = [400,400]
 
