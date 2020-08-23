@@ -28,11 +28,13 @@ class Camera(object):
         processed_img_new = self.preprocess_image(image)
 
         maxdiff = 0
+        box_width = cfg.TAC_BOX_X / 2
+        box_height = cfg.TAC_BOX_Y / 2
         zone = None
         for i, (zone_x, zone_y) in enumerate(cfg.TAC_BOX_CENTERS):
-            print(zone_x - cfg.TAC_BOX_X, zone_x + cfg.TAC_BOX_X, zone_y - cfg.TAC_BOX_Y, zone_y + cfg.TAC_BOX_Y)
-            newimg_crop = processed_img_new[zone_x - cfg.TAC_BOX_X:zone_x + cfg.TAC_BOX_X, zone_y - cfg.TAC_BOX_Y:zone_y + cfg.TAC_BOX_Y]
-            oldimg_crop = self.pre_move_img[zone_x - cfg.TAC_BOX_X:zone_x + cfg.TAC_BOX_X, zone_y - cfg.TAC_BOX_Y:zone_y + cfg.TAC_BOX_Y]
+            print(zone_x - box_width, zone_x + box_width, zone_y - box_height, zone_y + box_height)
+            newimg_crop = processed_img_new[zone_x - box_width:zone_x + box_width, zone_y - box_height:zone_y + box_height]
+            oldimg_crop = self.pre_move_img[zone_x - box_width:zone_x + box_width, zone_y - box_height:zone_y + box_height]
             debug_save_img(newimg_crop, 'newimg_crop.jpg')
             debug_save_img(oldimg_crop, 'oldimg_crop.jpg')
             zonediff = np.sum(cv2.absdiff(newimg_crop, oldimg_crop))
