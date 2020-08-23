@@ -95,13 +95,13 @@ class Camera(object):
         return cv2.cvtColor(import_img,cv2.COLOR_BGR2GRAY)
 
 
+def debug_save_img(img, imgname):
+    im = Image.fromarray(img)
+    im.save(os.path.join('/home/pi/', imgname))
+
+
 if __name__=='__main__':
     c = Camera()
     image = c._capture_image()
     proc_img = c.preprocess_image(image)
     debug_save_img(proc_img, 'post_proc_img.jpg')
-
-
-def debug_save_img(img, imgname):
-    im = Image.fromarray(img)
-    im.save(os.path.join('/home/pi/', imgname))
