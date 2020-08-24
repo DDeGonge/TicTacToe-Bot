@@ -47,7 +47,7 @@ struct scara_bot
 {
   public:
   void init(stepper step0, stepper step1, Servo servo_obj);
-  void configure(float arm0_mm_new, float arm1_mm_new, float s0_spr_new, float s1_spr_new, float x0_off_new, float y0_off_new);
+  void configure(float arm0_mm_new, float arm1_mm_new, float s0_spr_new, float s1_spr_new, float x0_off_new, float y0_off_new, float pen_new_up, float pen_new_dn);
   void enable_motors(bool x, bool y);
   void disable_motors(bool x, bool y);
   void zero(float x_target_mm, float y_target_mm);
@@ -56,6 +56,8 @@ struct scara_bot
   void set_def_speeds(float new_accel, float new_vel);
   void get_pos(float &xpos_mm, float &ypos_mm);
   void set_pos_mode(bool abs_true);
+  void lower_pen();
+  void raise_pen();
 
   void debug_print();
 
@@ -71,11 +73,13 @@ struct scara_bot
   float xpos_mm = 0;
   float ypos_mm = 0;
   float def_accel = 500;
-  float def_vel = 6000;
+  float def_vel = 100;
   float arm0_mm = 100.5;
   float arm1_mm = 90;
   float x0_offset_mm = 25;
   float y0_offset_mm = 135;
+  float servo_up_pwm = 0;
+  float servo_dn_pwm = 0;
 };
 
 struct gcode_command_floats

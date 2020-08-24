@@ -15,8 +15,9 @@ void loop()
   setLEDColor(200, 0, 0);
   unsigned long startTime_us = micros();
   unsigned long t_elapsed_us;
-  stepper s0, s1;
   Servo pen_servo;
+  pen_servo.attach(servo_pin);
+  stepper s0, s1;
   s0.init(s0_step, s0_dir, s0_en, false);
   s1.init(s1_step, s1_dir, s1_en, false);
 
@@ -108,10 +109,17 @@ void loop()
               bot.disable_motors(gcode.com_exists('x'), gcode.com_exists('y'));
               break;
             }
+            case 114: {
+              // Get current position
+              float xpos, ypos;
+              bot.get_pos(xpos, ypos);
+              Serial.println("TODO FINISH THIS ONE");
+              break;
+            }
             case 201: {
               // Set Acceleration Limits
               gcode_command_floats gcode(args);
-              bot.set_def_speeds(gcode.com_exists('a'), gcode.com_exists('v'));
+              bot.set_def_speeds(gcode.fetch('a'), gcode.fetch('v'));
               break;
             }
           }
@@ -123,12 +131,17 @@ void loop()
             case 0: {
               // configure hardware stuff
               gcode_command_floats gcode(args);
-              bot.configure(gcode.fetch('a'), gcode.fetch('b'), gcode.fetch('c'), gcode.fetch('d'), gcode.fetch('e'), gcode.fetch('f'));
+              bot.configure(gcode.fetch('a'), gcode.fetch('b'), gcode.fetch('c'), gcode.fetch('d'), gcode.fetch('e'), gcode.fetch('f'), gcode.fetch('g'), gcode.fetch('h'));
               break;
             }
             case 1: {
               // Set Zero Offset
-              Serial.println("TODO Set Zero Offset");
+              bot.lower_pen();
+              break;
+            }
+            case 2: {
+              // Set Zero Offset
+              bot.raise_pen();
               break;
             }
           }

@@ -109,7 +109,7 @@ void scara_bot::init(stepper step0, stepper step1, Servo servo_obj)
   p_servo = servo_obj;
 }
 
-void scara_bot::configure(float arm0_mm_new, float arm1_mm_new, float s0_spr_new, float s1_spr_new, float x0_off_new, float y0_off_new)
+void scara_bot::configure(float arm0_mm_new, float arm1_mm_new, float s0_spr_new, float s1_spr_new, float x0_off_new, float y0_off_new, float pen_new_up, float pen_new_dn)
 {
   if (arm0_mm_new != NOVALUE)
     arm0_mm = arm0_mm_new;
@@ -123,12 +123,18 @@ void scara_bot::configure(float arm0_mm_new, float arm1_mm_new, float s0_spr_new
     x0_offset_mm = x0_off_new;
   if (y0_off_new != NOVALUE)
     y0_offset_mm = y0_off_new;
+  if (pen_new_up != NOVALUE)
+    servo_up_pwm = pen_new_up;
+  if (pen_new_dn != NOVALUE)
+    servo_dn_pwm = pen_new_dn;
 }
 
 void scara_bot::set_def_speeds(float new_accel, float new_vel)
 {
-  def_accel = new_accel;
-  def_vel = 60 * new_vel;
+  if (new_accel != NOVALUE)
+    def_accel = new_accel;
+  if (new_vel != NOVALUE)
+    def_vel = new_vel;
 }
 
 void scara_bot::enable_motors(bool x, bool y)
@@ -205,6 +211,19 @@ void scara_bot::move_motor_linear(float x_target_mm, float y_target_mm, float v_
   float inflect_t1_s = inflect_t0_s + (move_dist_mm - (2 * accel_dist_mm)) / v_max;
   float move_time_s = inflect_t1_s + inflect_t0_s;
 
+//  Serial.print(v_max);
+//  Serial.print("\t");
+//  Serial.print(accel);
+//  Serial.print("\t");
+//  Serial.print(move_dist_mm);
+//  Serial.print("\t");
+//  Serial.print(accel_dist_mm);
+//  Serial.print("\t");
+//  Serial.print(x_start);
+//  Serial.print("\t");
+//  Serial.println(y_start);
+
+
   // Calculate when to take steps on the fly like a -boss- skrub
   uint8_t motion_state = 0; // 0: accelerating, 1: plateau, 2: decelerating, 3: finalize
   uint32_t t_start = micros();
@@ -260,7 +279,7 @@ void scara_bot::move_motor_linear(float x_target_mm, float y_target_mm, float v_
 
 void scara_bot::move_motor_arc(float x_target_mm, float y_target_mm, float ival, float jval, float v_max, bool cw)
 {
-  
+  // Ugh math sucks
 }
 
 double scara_bot::cos_solve(float l1, float l2, float l3)
@@ -314,6 +333,17 @@ void scara_bot::get_pos(float &xpos_mm, float &ypos_mm)
   ypos_mm = y0_offset_mm + ypos_mm;
 }
 
+void scara_bot::lower_pen()
+{
+  p_servo.write(servo_dn_pwm);
+  delay(0.003 * fabs(servo_up_pwm - servo_dn_pwm));
+}
+
+void scara_bot::raise_pen()
+{
+  p_servo.write(servo_up_pwm);
+  delay(0.003 * fabs(servo_up_pwm - servo_dn_pwm));
+}
 
 
 /* GCODE PARSER STUFF */

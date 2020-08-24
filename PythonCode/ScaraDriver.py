@@ -34,11 +34,11 @@ class Scara(object):
         self.serial_device.command('M84')
 
     def update_defaults(self, vel = None, acc = None):
-        if acc is None:
+        if acc == None:
             acc = cfg.default_accel_mmps2
-        if vel is None:
+        if vel == None:
             vel = cfg.default_vel_mmps
-        self.serial_device.command('M201 A{} V{}'.format(acc, vel * 60))
+        self.serial_device.command('M201 a{} v{}'.format(acc, vel))
 
     def absolute_move(self, xtar_mm, ytar_mm, velocity_mmps=None):
         # Calculate move

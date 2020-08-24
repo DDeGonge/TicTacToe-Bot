@@ -2,16 +2,17 @@
 s0_step_per_rev = 5760
 s1_step_per_rev = 3200
 
-default_vel_mmps = 500
-default_accel_mmps2 = 5000
+default_vel_mmps = 100.0
+default_accel_mmps2 = 500.0
 
 s0_arm_len_mm = 100.5
-s1_arm_len_mm = 90
+s1_arm_len_mm = 90.0
 
-step_len_us = 1  # NOT CURRENTLY USED
+pen_up_pwm = 120
+pen_dn_pwm = 100
 
-x_zero_offset = 25
-y_zero_offset = 150
+x_zero_offset = 20.5
+y_zero_offset = 141.5
 
 
 """ OPERATION PARAMETERS """
@@ -57,8 +58,10 @@ Feather_Parameter_Chars = {
     'c': s0_step_per_rev,
     'd': s1_step_per_rev,
     'e': x_zero_offset,
-    'f': y_zero_offset
+    'f': y_zero_offset,
+    'g': pen_up_pwm,
+    'h': pen_dn_pwm
 }
 
 """ DEBUG PARAMS """
-DEBUG_MODE = False
+DEBUG_MODE = True
