@@ -73,7 +73,17 @@ void parse_int(string inpt, char &cmd, int32_t &value)
   value = stoi(temp_arg_char);
 }
 
-void g1_parse(vector<string> args, float &xpos, float &ypos, float &feedrate)
+void error_blink(uint8_t errcode)
 {
-  
+  while (true)
+  {
+    for(uint8_t i = 0; i < errcode; i++)
+    {
+      setLEDColor(200, 0, 0);
+      delay(50);
+      setLEDColor(0, 0, 0);
+      delay(150);
+    }
+    delay(500);
+  }
 }
