@@ -4,8 +4,8 @@
 #define Serial SERIAL_PORT_USBVIRTUAL
 
 // Speaker stuff
-Adafruit_VS1053_FilePlayer musicPlayer = 
-  Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
+//Adafruit_VS1053_FilePlayer musicPlayer = 
+//  Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
 
 void setup()
 {
@@ -13,22 +13,22 @@ void setup()
   Serial.begin(250000);
   while (!Serial) { delay(1); }
   pixel.begin();
-  if (! musicPlayer.begin()) { // initialise the music player
-     Serial.println(F("Couldn't find VS1053, do you have the right pins defined?"));
-     error_blink(2);
-  }
-  Serial.println(F("VS1053 found"));
-
-  if (!SD.begin(CARDCS)) {
-    Serial.println("SD initialization failed.");
-    error_blink(3);
-  } else {
-    Serial.println("SD initialization successful.");
-  }
+//  if (! musicPlayer.begin()) { // initialise the music player
+//     Serial.println(F("Couldn't find VS1053, do you have the right pins defined?"));
+//     error_blink(2);
+//  }
+//  Serial.println(F("VS1053 found"));
+//
+//  if (!SD.begin(CARDCS)) {
+//    Serial.println("SD initialization failed.");
+//    error_blink(3);
+//  } else {
+//    Serial.println("SD initialization successful.");
+//  }
 
   // Configure music player
-  musicPlayer.setVolume(1,1);  // Lower values is louder. I only use right channel
-  musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
+//  musicPlayer.setVolume(1,1);  // Lower values is louder. I only use right channel
+//  musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
 }
 
 void loop()
@@ -170,7 +170,7 @@ void loop()
               // Play a tune!
               string str = "/" + args[1] + ".mp3";
               const char* strdata = str.data();
-              musicPlayer.playFullFile(strdata);
+//              musicPlayer.playFullFile(strdata);
               break;
             }
           }

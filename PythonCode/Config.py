@@ -2,17 +2,23 @@
 s0_step_per_rev = 5760
 s1_step_per_rev = 3200
 
-default_vel_mmps = 50.0
-default_accel_mmps2 = 500.0
+# default_vel_mmps = 800.0
+# default_accel_mmps2 = 40000.0
+default_vel_mmps = 100.0
+default_accel_mmps2 = 5000.0
 
 s0_arm_len_mm = 100.5
 s1_arm_len_mm = 90.0
 
 pen_up_pwm = 120
-pen_dn_pwm = 100
+pen_dn_pwm = 80
 
-x_zero_offset = 20.5
-y_zero_offset = 141.5
+x_zero_offset = 21
+y_zero_offset = 141
+
+board_center_x_mm = 60
+board_center_y_mm = 50
+box_size_mm = 20
 
 
 """ OPERATION PARAMETERS """
@@ -21,10 +27,10 @@ gcode_folder = 'gcode'
 
 """ CAMERA PARAMETERS """
 # Cropped region corner points, consider rotation plz
-p0 = [28, 38] # TL
-p1 = [575, 33] # TR
-p2 = [120, 410] # BL
-p3 = [488, 408] # BR
+p0 = [135, 125] # TL
+p1 = [510, 120] # TR
+p2 = [160, 400] # BL
+p3 = [395, 460] # BR
 
 IMAGE_RESOLUTION = (648,486)
 IMAGE_ROTATION_DEGS = 0

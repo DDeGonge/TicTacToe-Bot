@@ -188,15 +188,18 @@ void scara_bot::move_motor_linear(float x_target_mm, float y_target_mm, float v_
 
   // Populate with defaults if any are none
   v_max = v_max == NOVALUE ? def_vel : v_max / 60;
-  x_target_mm = x_target_mm == NOVALUE ? x_start : x_target_mm;
-  y_target_mm = y_target_mm == NOVALUE ? y_start : y_target_mm;
   float accel = def_accel;
 
   // If relative mode, do that
   if (absmode == false)
   {
-    x_target_mm += x_start;
-    y_target_mm += y_start;
+    x_target_mm = x_target_mm == NOVALUE ? x_start : x_target_mm + x_start;
+    y_target_mm = y_target_mm == NOVALUE ? y_start : y_target_mm + y_start;
+  }
+  else
+  {
+    x_target_mm = x_target_mm == NOVALUE ? x_start : x_target_mm;
+    y_target_mm = y_target_mm == NOVALUE ? y_start : y_target_mm;
   }
 
   // Calculate some basic move statistics
@@ -336,13 +339,13 @@ void scara_bot::get_pos(float &xpos_mm, float &ypos_mm)
 void scara_bot::lower_pen()
 {
   p_servo.write(servo_dn_pwm);
-  delay(0.003 * fabs(servo_up_pwm - servo_dn_pwm));
+  delay(3 * fabs(servo_up_pwm - servo_dn_pwm));
 }
 
 void scara_bot::raise_pen()
 {
   p_servo.write(servo_up_pwm);
-  delay(0.003 * fabs(servo_up_pwm - servo_dn_pwm));
+  delay(3 * fabs(servo_up_pwm - servo_dn_pwm));
 }
 
 

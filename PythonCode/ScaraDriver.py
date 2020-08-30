@@ -22,7 +22,7 @@ class Scara(object):
         self.serial_device.command(command_string)
 
     def home(self):
-        print('homed')
+        print('TODO implement this plz')
 
     def zero(self):
         self.serial_device.command('G92 X0 Y0')
@@ -32,6 +32,29 @@ class Scara(object):
 
     def disable(self):
         self.serial_device.command('M84')
+
+    def user_zero(self):
+        self.disable()
+        self.lower_pen()
+        _ = input('Press enter when zerod...')
+        self.enable()
+        self.zero()
+        self.raise_pen()
+        time.sleep(1)
+
+    def park(self):
+        self.serial_device.command('G1 X-30 Y90')
+        self.serial_device.command('G1 Y130')
+
+    def unpark(self):
+        self.serial_device.command('G1 X-30 Y90')
+        self.serial_device.command('G1 X0 Y0')
+
+    def raise_pen(self):
+        self.serial_device.command('C2')
+
+    def lower_pen(self):
+        self.serial_device.command('C1')
 
     def update_defaults(self, vel = None, acc = None):
         if acc == None:
@@ -51,7 +74,13 @@ class Scara(object):
         return self.absolute_move(xpos_mm + xtar_mm, ypos_mm + ytar_mm, velocity_mmps)
 
     def draw_move(self, move):
-        print('TODO: {}, {}'.format(move.x, move.y))
+        x_center = cfg.board_center_x_mm + (move.x - 1) * cfg.box_size_mm
+        y_center = cfg.board_center_y_mm + (1 - move.y) * cfg.box_size_mm
+        self.absolute_move(x_center, y_center)
+        self.send_gcode('draw_x.g')
+
+    def draw_board(self):
+        self.send_gcode('board.g')
 
     def send_gcode(self, filename):
         with open(os.path.join(cfg.gcode_folder, filename)) as f:

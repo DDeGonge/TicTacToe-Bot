@@ -7,12 +7,15 @@ from SerialDevice import *
 from ScaraDriver import *
 # from CameraDriver import *
 from OtherStuff import *
+from Gameplay import *
 
 
 def main():
     try:
         serdev = SerialDevice()
         scarabot = Scara(serdev)
+        scara.zero()
+        scara.enable()
         cam = Camera()
         cam.start_camera()
 
@@ -34,10 +37,23 @@ def main():
 def test():
     sd = SerialDevice()
     scara = Scara(sd)
+    # cam = Camera()
+    # cam.start_camera()
     
-    scara.zero()
-    scara.enable()
-    scara.send_gcode('test.g')
+    scara.user_zero()
+    # scara.draw_board()
+
+    # testmove = Move(xindex=0, yindex=0)
+    # scara.draw_move(testmove)
+    # testmove = Move(xindex=1, yindex=1)
+    # scara.draw_move(testmove)
+    # testmove = Move(xindex=0, yindex=2)
+    # scara.draw_move(testmove)
+
+    standard_game(scarabot, cam, bot_first = True)
+
+    scara.absolute_move(0, 0)
+
     scara.disable()
 
 if __name__=='__main__':
