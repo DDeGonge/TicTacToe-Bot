@@ -14,7 +14,12 @@ def standard_game(scarabot, cam, bot_first: bool):
     turn = 0 if bot_first else 1
 
     while True:
-        if turn % 2 == 0:
+        if turn == 0:
+            # Pre-defined bot first move to save cpu time
+            first_move = Move(xindex=0, yindex=0)
+            game.bot_move(first_move)
+            scarabot.draw_move(first_move)
+        elif turn % 2 == 0:
             # Bot turn
             scarabot.unpark()
             bot_best_move = game.get_best_move()
