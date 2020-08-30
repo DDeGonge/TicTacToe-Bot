@@ -39,8 +39,8 @@ class Scara(object):
         _ = input('Press enter when zerod...')
         self.enable()
         self.zero()
-        self.raise_pen()
         time.sleep(1)
+        self.raise_pen()
 
     def park(self):
         self.serial_device.command('G1 X-30 Y90')

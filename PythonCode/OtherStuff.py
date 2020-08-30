@@ -9,18 +9,20 @@ from ScaraDriver import *
 GAMETYPES = ['standard', 'meme']
 
 def standard_game(scarabot, cam, bot_first: bool):
-    Scara.draw_board()
+    scarabot.draw_board()
     game = TacBoard()
     turn = 0 if bot_first else 1
 
     while True:
         if turn % 2 == 0:
             # Bot turn
+            scarabot.unpark()
             bot_best_move = game.get_best_move()
             game.bot_move(bot_best_move)
-            Scara.draw_move(bot_best_move)
+            scarabot.draw_move(bot_best_move)
         else:
             # Player turn
+            scarabot.park()
             cam.locate_user_move_prep()
             _ = input('Press enter after moved. TODO auto detect this or something idk...')
             user_move_index = cam.locate_user_move()

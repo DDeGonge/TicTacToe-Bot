@@ -77,7 +77,7 @@ class TacBoard(object):
     @staticmethod
     def win_check(board_array=None):
         """ Return 0 if no win, 1 if bot win, -1 if user win """
-        if board_array == None:
+        if board_array is None:
             board_array = self.board
 
         def check_set(oneset):
