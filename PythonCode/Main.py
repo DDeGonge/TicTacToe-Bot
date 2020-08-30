@@ -5,7 +5,7 @@ import Config as cfg
 import random
 from SerialDevice import *
 from ScaraDriver import *
-# from CameraDriver import *
+from CameraDriver import *
 from OtherStuff import *
 from Gameplay import *
 
@@ -37,8 +37,8 @@ def main():
 def test():
     sd = SerialDevice()
     scara = Scara(sd)
-    # cam = Camera()
-    # cam.start_camera()
+    cam = Camera()
+    cam.start_camera()
     
     scara.user_zero()
     # scara.draw_board()
@@ -50,7 +50,7 @@ def test():
     # testmove = Move(xindex=0, yindex=2)
     # scara.draw_move(testmove)
 
-    standard_game(scarabot, cam, bot_first = True)
+    standard_game(scara, cam, bot_first = True)
 
     scara.absolute_move(0, 0)
 
