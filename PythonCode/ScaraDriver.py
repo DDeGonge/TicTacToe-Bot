@@ -34,12 +34,22 @@ class Scara(object):
         self.serial_device.command('M84')
 
     def user_zero(self):
+        # Too lazy to implement limit switches so now I have to do this..
         self.disable()
         self.lower_pen()
-        _ = input('Press enter when zerod...')
+        _ = input('Press enter when near zero...')
         self.enable()
+        while True:
+            com = input('Enter commands to move closer to zero in format "x,y", units are mm. Or press enter to continue: ')
+            if com == '':
+                break
+            else:
+                com = com.split(',')
+                if len(com) == 2:
+                    self.zero()
+                    self.absolute_move(float(com[0]), float(com[1])
+
         self.zero()
-        time.sleep(1)
         self.raise_pen()
 
     def park(self):
