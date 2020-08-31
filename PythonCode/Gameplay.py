@@ -1,6 +1,7 @@
 __version__ = '0.1.0'
 
 import numpy as np
+import math
 from time import sleep
 
 class Move(object):
@@ -18,12 +19,18 @@ class Move(object):
 class TacBoard(object):
     def __init__(self):
         self.board = np.zeros((3,3))  # 0 is no move, 1 is bot, -1 is user
+        self.winners = None  # Flat array with start and end of winning set
 
     def get_free_space_vector(self):
         ret_vec = []
         for row in self.board:
             ret_vec += [True if v == 0 else False for v in row]
         return ret_vec
+
+    def get_winner_coords(self):
+        p0 = [math.floor(self.winners[0] / 3), self.winners[0] % 3]
+        p1 = [math.floor(self.winners[1] / 3), self.winners[1] % 3]
+        return p0, p1
 
     def user_move(self, user_move_index):
         self.board[math.floor(user_move_index / 3), user_move_index % 3] = -1
@@ -89,19 +96,22 @@ class TacBoard(object):
         for row in range(3):
             setresult = check_set(board_array[row])
             if setresult is not 0:
+                self.winners = [row, row + 2]
                 return setresult
 
         for col in range(3):
             setresult = check_set(board_array[:,col])
             if setresult is not 0:
+                self.winners = [col, col + 6]
                 return setresult
 
-        diag1 = [board_array[0,0], board_array[1,1], board_array[2,2]]
-        diag2 = [board_array[0,2], board_array[1,1], board_array[2,0]]
+        diag1 = ([board_array[0,0], board_array[1,1], board_array[2,2]], [0, 8])
+        diag2 = ([board_array[0,2], board_array[1,1], board_array[2,0]], [2, 6])
 
-        for diagset in [diag1, diag2]:
+        for diagset, winset in [diag1, diag2]:
             setresult = check_set(diagset)
             if setresult is not 0:
+                self.winners = winset
                 return setresult
         
         return 0
@@ -117,12 +127,3 @@ if __name__=='__main__':
     # nextmove = tacgame.get_worst_move()
     print(nextmove.x, nextmove.y, nextmove.score)
     print(tacgame.get_free_space_vector())
-
-
-"""
-    bot=x
-
-    o . .
-    o x .
-    . . .
-"""

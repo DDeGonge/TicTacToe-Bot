@@ -92,6 +92,20 @@ class Scara(object):
     def draw_board(self):
         self.send_gcode('board.g')
 
+    def draw_win_line(self, game):
+        if game si None:
+            return
+
+        p_start, p_end = game.get_winner_coords()
+        p_start_x = cfg.board_center_x_mm + (p_start[0] - 1) * cfg.box_size_mm * 1.5
+        p_start_y = cfg.board_center_y_mm + (1 - p_start[1]) * cfg.box_size_mm * 1.5
+        p_end_x = cfg.board_center_x_mm + (p_end[0] - 1) * cfg.box_size_mm * 1.5
+        p_end_y = cfg.board_center_y_mm + (1 - p_end[1]) * cfg.box_size_mm * 1.5
+        self.absolute_move(p_start_x, p_start_y)
+        self.lower_pen()
+        self.absolute_move(p_end_x, p_end_y)
+        self.raise_pen()
+
     def send_gcode(self, filename):
         with open(os.path.join(cfg.gcode_folder, filename)) as f:
             while(True):

@@ -35,8 +35,12 @@ def standard_game(scarabot, cam, bot_first: bool):
                 print('user_move_index:', user_move_index)
             game.user_move(user_move_index)
 
-        if game.win_check() != 0:
-            break
+        if game.win_check() == 1:
+            scarabot.draw_win_line(game)
+            return
+        elif game.win_check() == -1:
+            # This should be impossible but idk..
+            return
 
         if cfg.DEBUG_MODE:
             print('Turn:', turn)
