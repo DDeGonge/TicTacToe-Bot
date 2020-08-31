@@ -47,7 +47,7 @@ class Scara(object):
                 com = com.split(',')
                 if len(com) == 2:
                     self.zero()
-                    self.absolute_move(float(com[0]), float(com[1])
+                    self.absolute_move(float(com[0]), float(com[1]))
 
         self.zero()
         self.raise_pen()
