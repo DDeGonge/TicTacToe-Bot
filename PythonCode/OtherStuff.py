@@ -30,12 +30,12 @@ def standard_game(scarabot, cam, bot_first: bool):
             scarabot.park()
             cam.locate_user_move_prep()
             _ = input('Press enter after moved. TODO auto detect this or something idk...')
-            user_move_index = cam.locate_user_move()
+            user_move_index = cam.locate_user_move(game.get_free_space_vector())
             if cfg.DEBUG_MODE:
                 print('user_move_index:', user_move_index)
             game.user_move(user_move_index)
 
-        if game.win_check != 0:
+        if game.win_check() != 0:
             break
 
         if cfg.DEBUG_MODE:
