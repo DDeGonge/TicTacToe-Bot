@@ -15,14 +15,16 @@ def standard_game(scarabot, cam, bot_first: bool):
 
     while True:
         if turn == 0:
-            # Pre-defined bot first move to save cpu time
-            first_move = Move(xindex=0, yindex=0)
+            # Pick random corner for first move
+            first_move = Move(xindex=random.randint(0,1)*2, yindex=random.randint(0,1)*2)
             game.bot_move(first_move)
             scarabot.draw_move(first_move)
         elif turn % 2 == 0:
             # Bot turn
             scarabot.unpark()
             bot_best_move = game.get_best_move()
+            if cfg.DEBUG_MODE:
+                print('bot move:', bot_best_move.x, bot_best_move.y)
             game.bot_move(bot_best_move)
             scarabot.draw_move(bot_best_move)
         else:
@@ -38,8 +40,11 @@ def standard_game(scarabot, cam, bot_first: bool):
         if game.win_check() == 1:
             scarabot.draw_win_line(game)
             return
+        elif game.win_check() == 2:
+            # Tie, should be impossible
+            return
         elif game.win_check() == -1:
-            # This should be impossible but idk..
+            # This should also be impossible but idk..
             return
 
         if cfg.DEBUG_MODE:

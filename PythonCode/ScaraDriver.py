@@ -110,10 +110,13 @@ class Scara(object):
         with open(os.path.join(cfg.gcode_folder, filename)) as f:
             while(True):
                 line = f.readline().strip('\n')
-                print(line)
                 if not line:
                     break
                 
+                if line[0] == ';':
+                    # Comments start with semicolon
+                    continue
+
                 self.serial_device.command(line)
 
     @property

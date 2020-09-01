@@ -37,7 +37,7 @@ class TacBoard(object):
         self.board[math.floor(user_move_index / 3), user_move_index % 3] = -1
 
     def bot_move(self, botmove):
-        self.board[botmove.x, botmove.y] = 1
+        self.board[botmove.y, botmove.x] = 1
 
     def get_best_move(self):
         if cfg.DEBUG_MODE:
@@ -85,7 +85,7 @@ class TacBoard(object):
         return [Move(None, x, y) for x in range(3) for y in range(3) if board_array[y, x] == 0]
 
     def win_check(self, board_array=None):
-        """ Return 0 if no win, 1 if bot win, -1 if user win """
+        """ Return 0 if no win, 1 if bot win, -1 if user win, 2 if tie """
         if board_array is None:
             board_array = self.board
 
@@ -116,7 +116,10 @@ class TacBoard(object):
             if setresult is not 0:
                 self.winners = winset
                 return setresult
-        
+
+        # If no wins and no free spaces left, is a tie. Otherwise game still in progress
+        if not 0 in set(board_array):
+            return 2
         return 0
 
 
