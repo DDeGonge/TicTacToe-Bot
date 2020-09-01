@@ -65,5 +65,5 @@ def test():
 
 if __name__=='__main__':
     # main()
-    # test()
-    draw_butterfly()
+    test()
+    # draw_butterfly()

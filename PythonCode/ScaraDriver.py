@@ -97,10 +97,10 @@ class Scara(object):
             return
 
         p_start, p_end = game.get_winner_coords()
-        p_start_x = cfg.board_center_x_mm + (p_start[0] - 1) * cfg.box_size_mm * 1.5
-        p_start_y = cfg.board_center_y_mm + (1 - p_start[1]) * cfg.box_size_mm * 1.5
-        p_end_x = cfg.board_center_x_mm + (p_end[0] - 1) * cfg.box_size_mm * 1.5
-        p_end_y = cfg.board_center_y_mm + (1 - p_end[1]) * cfg.box_size_mm * 1.5
+        p_start_x = cfg.board_center_x_mm + (p_start[0] - 1) * cfg.box_size_mm
+        p_start_y = cfg.board_center_y_mm + (1 - p_start[1]) * cfg.box_size_mm
+        p_end_x = cfg.board_center_x_mm + (p_end[0] - 1) * cfg.box_size_mm
+        p_end_y = cfg.board_center_y_mm + (1 - p_end[1]) * cfg.box_size_mm
         self.absolute_move(p_start_x, p_start_y)
         self.lower_pen()
         self.absolute_move(p_end_x, p_end_y)

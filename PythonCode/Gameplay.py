@@ -2,7 +2,7 @@ __version__ = '0.1.0'
 
 import numpy as np
 import math
-import config as cfg
+import Config as cfg
 from time import sleep
 
 class Move(object):
@@ -66,7 +66,7 @@ class TacBoard(object):
         # Otherwise do minmax search
         for move in moves:
             board_copy = board_array.copy()
-            board_copy[move.x][move.y] = player
+            board_copy[move.y][move.x] = player
             test_move = self._calc_move(board_copy, -1 * player, worst=worst)
             test_move.x = move.x
             test_move.y = move.y
@@ -82,7 +82,7 @@ class TacBoard(object):
         if board_array is None:
             board_array = self.board
 
-        return [Move(None, r, c) for r in range(3) for c in range(3) if board_array[r,c] == 0]
+        return [Move(None, x, y) for x in range(3) for y in range(3) if board_array[y, x] == 0]
 
     def win_check(self, board_array=None):
         """ Return 0 if no win, 1 if bot win, -1 if user win """
