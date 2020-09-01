@@ -2,6 +2,7 @@ __version__ = '0.1.0'
 
 import numpy as np
 import math
+import config as cfg
 from time import sleep
 
 class Move(object):
@@ -39,6 +40,8 @@ class TacBoard(object):
         self.board[botmove.x, botmove.y] = 1
 
     def get_best_move(self):
+        if cfg.DEBUG_MODE:
+            print(self.board)
         return self._calc_move(self.board, 1)
 
     def get_worst_move(self):

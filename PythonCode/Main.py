@@ -34,6 +34,13 @@ def main():
     except Exception as e:
         raise e
 
+def draw_butterfly():
+    sd = SerialDevice()
+    scara = Scara(sd)
+    scara.user_zero()
+    scara.absolute_move(20,20)
+    scara.send_gcode('butter.g')
+
 def test():
     sd = SerialDevice()
     scara = Scara(sd)
@@ -58,4 +65,5 @@ def test():
 
 if __name__=='__main__':
     # main()
-    test()
+    # test()
+    draw_butterfly()

@@ -93,7 +93,7 @@ class Scara(object):
         self.send_gcode('board.g')
 
     def draw_win_line(self, game):
-        if game si None:
+        if game is None:
             return
 
         p_start, p_end = game.get_winner_coords()
