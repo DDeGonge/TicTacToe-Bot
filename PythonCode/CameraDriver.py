@@ -44,6 +44,14 @@ class Camera(object):
 
         return zone
 
+    def identify_motion(self):
+        image = self._capture_image()
+        processed_img_new = self.preprocess_image(image)
+
+        if np.sum(cv2.absdiff(image, processed_img_new)) / (cfg.IMAGE_RESOLUTION[0] * cfg.IMAGE_RESOLUTION[1]) > cfg.MOTION_MIN_CHANGE:
+            return True
+        return False
+
     def _capture_image(self):
         if not self.is_enabled:
             self.start_camera()

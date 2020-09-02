@@ -48,6 +48,24 @@ class TacBoard(object):
         # For the memes....
         return self._calc_move(self.board, 1, worst=True)
 
+    def is_bot_win_possible(self):
+        # Checks if user is about to block bots last chance to win
+        # This has issues but probably good enough
+        board_copy = self.board.copy()
+        player_move = self._calc_move(board_copy, 1)
+        board_copy[player_move.y, player_move.x] = -1
+
+        if self.win_check(board_copy) == -1:
+            return False
+
+        for x in range(3):
+            for y in range(3):
+                board_copy[y, x] = 1 if board_copy[y, x] == 0 else board_copy[y, x]
+
+        if self.win_check(board_copy) == 1:
+            return True
+        return False
+
     def _calc_move(self, board_array, player, worst=False):
         # Worst move for AI does minmin instead of minmax search
         if worst == True or player == -1:
@@ -58,7 +76,7 @@ class TacBoard(object):
         moves = self.possible_moves(board_array)
 
         # Check if game is over
-        score = self.win_check(board_array)
+        score = self.win_check(board_array, report_tie=False)
         if len(moves) == 0 or not score == 0:
             best_move.score = score
             return best_move
@@ -84,7 +102,7 @@ class TacBoard(object):
 
         return [Move(None, x, y) for x in range(3) for y in range(3) if board_array[y, x] == 0]
 
-    def win_check(self, board_array=None):
+    def win_check(self, board_array=None, report_tie=False):
         """ Return 0 if no win, 1 if bot win, -1 if user win, 2 if tie """
         if board_array is None:
             board_array = self.board
@@ -118,7 +136,7 @@ class TacBoard(object):
                 return setresult
 
         # If no wins and no free spaces left, is a tie. Otherwise game still in progress
-        if not 0 in set(board_array):
+        if report_tie and not any(0 in x for x in board_array):
             return 2
         return 0
 
@@ -126,10 +144,8 @@ class TacBoard(object):
 # Standalone mode for testing
 if __name__=='__main__':
     tacgame = TacBoard()
-    tacgame.user_move(0,0)
-    tacgame.bot_move(1,1)
-    tacgame.user_move(1,0)
-    nextmove = tacgame.get_best_move()
-    # nextmove = tacgame.get_worst_move()
-    print(nextmove.x, nextmove.y, nextmove.score)
-    print(tacgame.get_free_space_vector())
+    tacgame.board = np.array(
+        [[-1,-1,1],
+        [1,-1,0],
+        [1,1,1]])
+    print(tacgame.is_bot_win_possible())

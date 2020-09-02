@@ -30,7 +30,11 @@ def standard_game(scarabot, cam, bot_first: bool):
         else:
             # Player turn
             scarabot.park()
+            bot_win_possible = game.is_bot_win_possible()
             cam.locate_user_move_prep()
+            if bot_win_possible is False:
+                swat(cam, scarabot, n=2)
+                break
             _ = input('Press enter after moved. TODO auto detect this or something idk...')
             user_move_index = cam.locate_user_move(game.get_free_space_vector())
             if cfg.DEBUG_MODE:
@@ -55,3 +59,19 @@ def standard_game(scarabot, cam, bot_first: bool):
 
 def meme_game(scarabot, cam, bot_first: bool):
     draw_board()
+
+def swat(cam, bot, n=1):
+    """ Swat away user hand when seen n times """
+    timeout_s = 60
+    swats = 0
+    t_start = time.time()
+    while time.time() < t_start + timeout_s:
+        if cam.identify_motion():
+            bot.absolute_move(-20,40,300)
+            bot.absolute_move(120,40,300)
+            bot.absolute_move(-20,40,300)
+            bot.park()
+            swats += 1
+
+        if swats >= n:
+            return
