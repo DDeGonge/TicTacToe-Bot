@@ -54,13 +54,13 @@ class Scara(object):
         self.raise_pen()
 
     def park(self):
-        if self.is_parked = False:
+        if self.is_parked is False:
             self.serial_device.command('G1 X-30 Y90')
             self.serial_device.command('G1 Y130')
         self.is_parked = True
 
     def unpark(self):
-        if self.is_parked = True:
+        if self.is_parked is True:
             self.serial_device.command('G1 X-30 Y90')
             self.serial_device.command('G1 X0 Y0')
         self.is_parked = False
