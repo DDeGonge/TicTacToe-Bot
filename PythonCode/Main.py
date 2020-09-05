@@ -18,7 +18,7 @@ def main():
         cam = Camera()
         spkr = Speaker()
 
-        scara.user_zero()
+        scarabot.user_zero()
         cam.start_camera()
 
         while True:
@@ -33,6 +33,8 @@ def main():
                 standard_game(scarabot, cam, spkr, bot_first = bot_first)
             elif game_function == 'meme':
                 meme_game(scarabot, cam, spkr, bot_first = bot_first)
+
+            scarabot.park()
                 
     except Exception as e:
         raise e
