@@ -23,7 +23,7 @@ class Speaker(object):
 
     def __init__(self):
         self.generate_tracks()
-        pg.mixer.init(freq, bitsize, channels, buffer)
+        pg.mixer.init(self.freq, self.bitsize, self.channels, self.buffer)
         pg.mixer.music.set_volume(self.volume)
 
     def generate_tracks(self):
@@ -37,8 +37,8 @@ class Speaker(object):
 
     def _play_track(self, keyname):
         track_i = random.randint(0, len(self.tracks[keyname]) - 1)
-        track = self.tracks[track_i]
-        pg.mixer.music.load(os.path.join(audio_path, track))
+        track = self.tracks[keyname][track_i]
+        pg.mixer.music.load(os.path.join(self.audio_path, track))
         pg.mixer.music.play()
 
     def wait_for_sound_to_end(self):
