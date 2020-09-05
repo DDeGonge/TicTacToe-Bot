@@ -49,6 +49,9 @@ def standard_game(scarabot, cam, spkr, bot_first: bool):
             print('Turn:', turn)
 
         game_result = game.win_check(report_tie=True)
+        if cfg.DEBUG_MODE:
+            print('Game Result:', game_result)
+
         if game_result == 1:
             spkr.play_compliment()
             scarabot.draw_win_line(game)
