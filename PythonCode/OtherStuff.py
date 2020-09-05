@@ -58,7 +58,14 @@ def standard_game(scarabot, cam, bot_first: bool):
 
 
 def meme_game(scarabot, cam, bot_first: bool):
-    draw_board()
+    print("one day this will exist. But for now, I am the meme.")
+
+def distract(cam):
+    timeout_s = 60
+    t_start = time.time()
+    while time.time() < t_start + timeout_s:
+        if cam.identify_motion():
+            
 
 def swat(cam, bot, n=1):
     """ Swat away user hand when seen n times """
