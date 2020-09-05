@@ -4,14 +4,14 @@ s1_step_per_rev = 3200
 
 # default_vel_mmps = 800.0
 # default_accel_mmps2 = 40000.0
-default_vel_mmps = 100.0
+default_vel_mmps = 250.0
 default_accel_mmps2 = 10000.0
 
 s0_arm_len_mm = 100.5
 s1_arm_len_mm = 90.0
 
 pen_up_pwm = 100
-pen_dn_pwm = 75
+pen_dn_pwm = 70
 
 x_zero_offset = 21
 y_zero_offset = 141

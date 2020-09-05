@@ -117,7 +117,7 @@ class TacBoard(object):
         for row in range(3):
             setresult = check_set(board_array[row])
             if setresult is not 0:
-                self.winners = [row, row + 2]
+                self.winners = [3 * row, 3 * row + 2]
                 return setresult
 
         for col in range(3):

@@ -40,8 +40,10 @@ def standard_game(scarabot, cam, spkr, bot_first: bool):
             cam.locate_user_move_prep()
             spkr.play_users_turn()
             if bot_win_possible is False:
-                # swat(cam, scarabot, spkr, n=2)
-                distract(cam, spkr)
+                if random.randint(0,1) == 0:
+                    swat(cam, scarabot, spkr, n=2)
+                else:
+                    distract(cam, spkr)
                 fasttrack = True
             else:
                 _ = input('Press enter after moved. TODO auto detect this or something idk...')
@@ -81,6 +83,7 @@ def distract(cam, spkr):
     while time.time() < t_start + timeout_s:
         if cam.identify_motion():
             spkr.play_distract()
+            time.sleep(2)
             return
 
 def swat(cam, bot, spkr, n=1):

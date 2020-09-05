@@ -12,6 +12,7 @@ class Scara(object):
         self.y_error = 0.
         self.configure()
         self.update_defaults()
+        self.is_parked = False
 
     """ Motion stuff """
 
@@ -53,12 +54,16 @@ class Scara(object):
         self.raise_pen()
 
     def park(self):
-        self.serial_device.command('G1 X-30 Y90')
-        self.serial_device.command('G1 Y130')
+        if self.is_parked = False:
+            self.serial_device.command('G1 X-30 Y90')
+            self.serial_device.command('G1 Y130')
+        self.is_parked = True
 
     def unpark(self):
-        self.serial_device.command('G1 X-30 Y90')
-        self.serial_device.command('G1 X0 Y0')
+        if self.is_parked = True:
+            self.serial_device.command('G1 X-30 Y90')
+            self.serial_device.command('G1 X0 Y0')
+        self.is_parked = False
 
     def raise_pen(self):
         self.serial_device.command('C2')
