@@ -130,13 +130,3 @@ class Scara(object):
     @property
     def ypos_mm(self):
         return
-
-
-    """ Talking stuff """
-
-    def speak_opener(bot_first):
-        if bot_first:
-            self.serial_device.command('TODO')
-        else:
-            self.serial_device.command('TODO')
-

@@ -8,7 +8,8 @@ from ScaraDriver import *
 
 GAMETYPES = ['standard', 'meme']
 
-def standard_game(scarabot, cam, bot_first: bool):
+def standard_game(scarabot, cam, spkr, bot_first: bool):
+    spkr.play_opener()
     scarabot.draw_board()
     game = TacBoard()
     turn = 0 if bot_first else 1
@@ -32,42 +33,47 @@ def standard_game(scarabot, cam, bot_first: bool):
             scarabot.park()
             bot_win_possible = game.is_bot_win_possible()
             cam.locate_user_move_prep()
+            spkr.play_users_turn()
             if bot_win_possible is False:
-                swat(cam, scarabot, n=2)
+                swat(cam, scarabot, spkr, n=2)
+                # distract(cam, spkr)
                 break
+
             _ = input('Press enter after moved. TODO auto detect this or something idk...')
             user_move_index = cam.locate_user_move(game.get_free_space_vector())
             if cfg.DEBUG_MODE:
                 print('user_move_index:', user_move_index)
             game.user_move(user_move_index)
 
-        if game.win_check() == 1:
-            scarabot.draw_win_line(game)
-            return
-        elif game.win_check() == 2:
-            # Tie, should be impossible
-            return
-        elif game.win_check() == -1:
-            # This should also be impossible but idk..
-            return
-
         if cfg.DEBUG_MODE:
             print('Turn:', turn)
+
+        game_result = game.win_check(report_tie=True)
+        if game_result == 1:
+            spkr.play_compliment()
+            scarabot.draw_win_line(game)
+            return
+        elif game_result == 2:
+            # Tie, should be impossible
+            return
+        elif game_result == -1:
+            # This should also be impossible but idk..
+            return
 
         turn += 1
 
 
-def meme_game(scarabot, cam, bot_first: bool):
+def meme_game(scarabot, cam, spkr, bot_first: bool):
     print("one day this will exist. But for now, I am the meme.")
 
-def distract(cam):
+def distract(cam, spkr):
     timeout_s = 60
     t_start = time.time()
     while time.time() < t_start + timeout_s:
         if cam.identify_motion():
-            
+            spkr.play_distract()
 
-def swat(cam, bot, n=1):
+def swat(cam, bot, spkr, n=1):
     """ Swat away user hand when seen n times """
     timeout_s = 60
     swats = 0
@@ -77,8 +83,10 @@ def swat(cam, bot, n=1):
             bot.absolute_move(-20,40,300)
             bot.absolute_move(120,40,300)
             bot.absolute_move(-20,40,300)
-            bot.park()
             swats += 1
 
         if swats >= n:
             return
+
+        spkr.play_users_turn()
+        bot.park()

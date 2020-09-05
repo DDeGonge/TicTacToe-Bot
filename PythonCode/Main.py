@@ -6,6 +6,7 @@ import random
 from SerialDevice import *
 from ScaraDriver import *
 from CameraDriver import *
+from SpeakerDriver import *
 from OtherStuff import *
 from Gameplay import *
 
@@ -18,18 +19,18 @@ def main():
         scara.enable()
         cam = Camera()
         cam.start_camera()
+        spkr = Speaker()
 
         while True:
             button_input = True
             if button_input:
                 bot_first = random.choice([True, False])
-                game_function = random.choice(GAMETYPES)
-                scarabot.speak_opener(bot_first)
+                game_function = 'standard'  # random.choice(GAMETYPES)
 
                 if game_function == 'standard':
-                    standard_game(scarabot, cam, bot_first = bot_first)
+                    standard_game(scarabot, cam, spkr, bot_first = bot_first)
                 elif game_function == 'meme':
-                    meme_game(scarabot, cam, bot_first = bot_first)
+                    meme_game(scarabot, cam, spkr, bot_first = bot_first)
                 
     except Exception as e:
         raise e
