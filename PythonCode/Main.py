@@ -15,11 +15,11 @@ def main():
     try:
         serdev = SerialDevice()
         scarabot = Scara(serdev)
-        scara.zero()
-        scara.enable()
         cam = Camera()
-        cam.start_camera()
         spkr = Speaker()
+
+        scara.user_zero()
+        cam.start_camera()
 
         while True:
             button_input = True
@@ -47,6 +47,7 @@ def test():
     scara = Scara(sd)
     cam = Camera()
     cam.start_camera()
+    spkr = Speaker()
     
     scara.user_zero()
     # scara.draw_board()
@@ -58,7 +59,7 @@ def test():
     # testmove = Move(xindex=0, yindex=2)
     # scara.draw_move(testmove)
 
-    standard_game(scara, cam, bot_first = True)
+    standard_game(scara, cam, spkr, bot_first = True)
 
     scara.absolute_move(0, 0)
 
