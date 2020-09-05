@@ -76,6 +76,7 @@ def meme_game(scarabot, cam, spkr, bot_first: bool):
 def distract(cam, spkr):
     timeout_s = 60
     t_start = time.time()
+    cam.locate_user_move_prep()
     while time.time() < t_start + timeout_s:
         if cam.identify_motion():
             spkr.play_distract()
@@ -85,6 +86,7 @@ def swat(cam, bot, spkr, n=1):
     timeout_s = 60
     swats = 0
     t_start = time.time()
+    cam.locate_user_move_prep()
     while time.time() < t_start + timeout_s:
         if cam.identify_motion():
             bot.absolute_move(-20,40,300)

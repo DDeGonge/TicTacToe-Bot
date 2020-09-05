@@ -48,7 +48,11 @@ class Camera(object):
         image = self._capture_image()
         processed_img_new = self.preprocess_image(image)
 
-        if np.sum(cv2.absdiff(image, processed_img_new)) / (cfg.IMAGE_RESOLUTION[0] * cfg.IMAGE_RESOLUTION[1]) > cfg.MOTION_MIN_CHANGE:
+        motion_diff = np.sum(cv2.absdiff(self.pre_move_img, processed_img_new)) / (cfg.IMAGE_RESOLUTION[0] * cfg.IMAGE_RESOLUTION[1])
+        if cfg.DEBUG_MODE:
+            print('identify motion diff:', motion_diff)
+
+        if motion_diff > cfg.MOTION_MIN_CHANGE:
             return True
         return False
 
