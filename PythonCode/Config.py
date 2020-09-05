@@ -5,7 +5,7 @@ s1_step_per_rev = 3200
 # default_vel_mmps = 800.0
 # default_accel_mmps2 = 40000.0
 default_vel_mmps = 100.0
-default_accel_mmps2 = 5000.0
+default_accel_mmps2 = 10000.0
 
 s0_arm_len_mm = 100.5
 s1_arm_len_mm = 90.0
