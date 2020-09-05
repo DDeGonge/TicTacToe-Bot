@@ -92,10 +92,12 @@ def swat(cam, bot, spkr, n=1):
             bot.absolute_move(-20,40,300)
             bot.absolute_move(120,40,300)
             bot.absolute_move(-20,40,300)
+            bot.park()
             swats += 1
 
-        if swats >= n:
-            return
+            if swats >= n:
+                spkr.play_taunt()
+                return
 
-        spkr.play_users_turn()
-        bot.park()
+            spkr.play_users_turn()
+            
