@@ -32,9 +32,9 @@ def standard_game(scarabot, cam, spkr, bot_first: bool):
             # Player turn
             scarabot.park()
             if turn >= 5:
-                bot_win_possible = True
-            else:
                 bot_win_possible = game.is_bot_win_possible()
+            else:
+                bot_win_possible= True
 
             cam.locate_user_move_prep()
             spkr.play_users_turn()

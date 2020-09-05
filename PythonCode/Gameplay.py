@@ -29,8 +29,8 @@ class TacBoard(object):
         return ret_vec
 
     def get_winner_coords(self):
-        p0 = [math.floor(self.winners[0] % 3, self.winners[0] / 3)]
-        p1 = [math.floor(self.winners[1] % 3, self.winners[1] / 3)]
+        p0 = [self.winners[0] % 3, math.floor(self.winners[0] / 3)]
+        p1 = [self.winners[1] % 3, math.floor(self.winners[1] / 3)]
         return p0, p1
 
     def user_move(self, user_move_index):
