@@ -108,7 +108,7 @@ class Scara(object):
         p_end_y = cfg.board_center_y_mm + (1 - p_end[1]) * cfg.box_size_mm
         self.absolute_move(p_start_x, p_start_y)
         self.lower_pen()
-        self.absolute_move(p_end_x, p_end_y)
+        self.absolute_move(p_end_x, p_end_y, 100)
         self.raise_pen()
 
     def send_gcode(self, filename):
