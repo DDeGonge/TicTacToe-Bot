@@ -13,6 +13,7 @@ def standard_game(scarabot, cam, spkr, bot_first: bool):
     scarabot.draw_board()
     game = TacBoard()
     turn = 0 if bot_first else 1
+    fasttrack = False  # Bot goes until wins
 
     while True:
         if turn == 0:
@@ -20,7 +21,7 @@ def standard_game(scarabot, cam, spkr, bot_first: bool):
             first_move = Move(xindex=random.randint(0,1)*2, yindex=random.randint(0,1)*2)
             game.bot_move(first_move)
             scarabot.draw_move(first_move)
-        elif turn % 2 == 0:
+        elif fasttrack is True or turn % 2 == 0:
             # Bot turn
             scarabot.unpark()
             bot_best_move = game.get_best_move()
@@ -34,20 +35,20 @@ def standard_game(scarabot, cam, spkr, bot_first: bool):
             if turn >= 5:
                 bot_win_possible = game.is_bot_win_possible()
             else:
-                bot_win_possible= True
+                bot_win_possible = True
 
             cam.locate_user_move_prep()
             spkr.play_users_turn()
             if bot_win_possible is False:
                 swat(cam, scarabot, spkr, n=2)
                 # distract(cam, spkr)
-                break
-
-            _ = input('Press enter after moved. TODO auto detect this or something idk...')
-            user_move_index = cam.locate_user_move(game.get_free_space_vector())
-            if cfg.DEBUG_MODE:
-                print('user_move_index:', user_move_index)
-            game.user_move(user_move_index)
+                fasttrack = True
+            else:
+                _ = input('Press enter after moved. TODO auto detect this or something idk...')
+                user_move_index = cam.locate_user_move(game.get_free_space_vector())
+                if cfg.DEBUG_MODE:
+                    print('user_move_index:', user_move_index)
+                game.user_move(user_move_index)
 
         if cfg.DEBUG_MODE:
             print('Turn:', turn)
@@ -89,9 +90,9 @@ def swat(cam, bot, spkr, n=1):
     cam.locate_user_move_prep()
     while time.time() < t_start + timeout_s:
         if cam.identify_motion():
-            bot.absolute_move(-20,40,300)
-            bot.absolute_move(120,40,300)
-            bot.absolute_move(-20,40,300)
+            bot.absolute_move(-20,80,500)
+            bot.absolute_move(120,40,400)
+            bot.absolute_move(-20,80,400)
             bot.park()
             swats += 1
 
