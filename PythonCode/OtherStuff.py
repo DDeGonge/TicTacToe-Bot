@@ -81,6 +81,7 @@ def distract(cam, spkr):
     while time.time() < t_start + timeout_s:
         if cam.identify_motion():
             spkr.play_distract()
+            return
 
 def swat(cam, bot, spkr, n=1):
     """ Swat away user hand when seen n times """

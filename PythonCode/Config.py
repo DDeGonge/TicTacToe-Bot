@@ -10,8 +10,8 @@ default_accel_mmps2 = 10000.0
 s0_arm_len_mm = 100.5
 s1_arm_len_mm = 90.0
 
-pen_up_pwm = 120
-pen_dn_pwm = 80
+pen_up_pwm = 100
+pen_dn_pwm = 75
 
 x_zero_offset = 21
 y_zero_offset = 141
@@ -23,6 +23,7 @@ box_size_mm = 20
 
 """ OPERATION PARAMETERS """
 gcode_folder = 'gcode'
+
 
 
 """ CAMERA PARAMETERS """
