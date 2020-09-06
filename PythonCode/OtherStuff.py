@@ -10,6 +10,7 @@ GAMETYPES = ['standard', 'meme']
 
 def standard_game(scarabot, cam, spkr, bot_first: bool):
     spkr.play_opener()
+    scarabot.unpark()
     scarabot.draw_board()
     game = TacBoard()
     turn = 0 if bot_first else 1

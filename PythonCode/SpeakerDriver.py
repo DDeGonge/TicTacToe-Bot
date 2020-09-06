@@ -48,7 +48,7 @@ class Speaker(object):
             track = self.tracks[keyname][track_i]
 
         # Wait for previous track to finish if still running
-        # self.wait_for_sound_to_end()
+        self.wait_for_sound_to_end()
 
         pg.mixer.music.load(os.path.join(cfg.audio_path, track))
         pg.mixer.music.play()
