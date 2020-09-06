@@ -32,7 +32,7 @@ class Speaker(object):
 
     def generate_tracks(self):
         self.tracks = {}
-        files = [f for f in os.listdir(self.audio_path) if f.endswith('.mp3')]
+        files = [f for f in os.listdir(cfg.audio_path) if f.endswith('.mp3')]
         for key, value in self.prefixes.items():
             self.tracks[key] = []
             for f in files:
@@ -50,7 +50,7 @@ class Speaker(object):
         # Wait for previous track to finish if still running
         # self.wait_for_sound_to_end()
 
-        pg.mixer.music.load(os.path.join(self.audio_path, track))
+        pg.mixer.music.load(os.path.join(cfg.audio_path, track))
         pg.mixer.music.play()
 
     def wait_for_sound_to_end(self):
