@@ -19,6 +19,7 @@ def main():
         spkr = Speaker()
 
         scarabot.user_zero()
+        scarabot.park()
         cam.start_camera()
 
         while True:

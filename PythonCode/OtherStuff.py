@@ -18,6 +18,7 @@ def standard_game(scarabot, cam, spkr, bot_first: bool):
     while True:
         if turn == 0:
             # Pick random corner for first move
+            scarabot.unpark()
             first_move = Move(xindex=random.randint(0,1)*2, yindex=random.randint(0,1)*2)
             game.bot_move(first_move)
             scarabot.draw_move(first_move)
