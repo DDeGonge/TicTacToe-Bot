@@ -23,7 +23,7 @@ box_size_mm = 20
 
 """ OPERATION PARAMETERS """
 gcode_folder = 'gcode'
-
+audio_path = 'audio'
 
 
 """ CAMERA PARAMETERS """
@@ -56,6 +56,13 @@ TAC_BOX_Y = 90
 """ OPENCV PARAMETERS """
 MOTION_MIN_CHANGE = 1.0
 
+
+""" SPEAKER PARAMETERS """
+freq = 44100    # audio CD quality
+bitsize = -16   # unsigned 16 bit
+channels = 2    # 1 is mono, 2 is stereo
+buffer = 2048   # number of samples (experiment to get right sound)
+volume = 0.95
 
 
 """ FEATHER COMM PARAMETERS """

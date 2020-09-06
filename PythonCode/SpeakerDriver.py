@@ -5,9 +5,9 @@ import pygame as pg
 import os
 import time
 import random
+import Config as cfg
 
 class Speaker(object):
-    audio_path = 'audio'
     prefixes = {
         'taunt': 'taunt',
         'compliment': 'comp',
@@ -17,16 +17,11 @@ class Speaker(object):
         'opener': 'open',
         'usermove': 'move'
     }
-    freq = 44100    # audio CD quality
-    bitsize = -16   # unsigned 16 bit
-    channels = 2    # 1 is mono, 2 is stereo
-    buffer = 2048   # number of samples (experiment to get right sound)
-    volume = 0.75
 
     def __init__(self):
         self.generate_tracks()
-        pg.mixer.init(self.freq, self.bitsize, self.channels, self.buffer)
-        pg.mixer.music.set_volume(self.volume)
+        pg.mixer.init(cfg.freq, cfg.bitsize, cfg.channels, cfg.buffer)
+        pg.mixer.music.set_volume(cfg.volume)
         self.cat_mode = False
 
     def set_cat_mode(self):
