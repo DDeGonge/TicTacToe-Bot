@@ -23,11 +23,16 @@ def main():
         cam.start_camera()
 
         while True:
-            _ = input('Press enter to start game...')
+            inpt = input('Press enter to start game...')
 
             # Future improvements can happen here
             bot_first = True  # random.choice([True, False])
             game_function = 'standard'  # random.choice(GAMETYPES)
+
+            if inpt == 'c':
+                spkr.set_cat_mode()
+            else:
+                spkr.set_human_mode()
 
             # Start game
             if game_function == 'standard':
