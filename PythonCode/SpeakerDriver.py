@@ -15,7 +15,8 @@ class Speaker(object):
         'distract': 'distr',
         'swat': 'swat',
         'opener': 'open',
-        'usermove': 'move'
+        'usermove': 'move',
+        'other': 'eggs'
     }
 
     def __init__(self):
@@ -77,6 +78,10 @@ class Speaker(object):
 
     def play_users_turn(self):
         self._play_track('usermove')
+
+    def play_other(self):
+        # For video stuffs
+        self._play_track('other')
 
 
 if __name__=='__main__':
