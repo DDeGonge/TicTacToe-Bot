@@ -11,7 +11,7 @@ class Speaker(object):
     prefixes = {
         'taunt': 'taunt',
         'compliment': 'comp',
-        'cat': 'meow',
+        'cat': 'cat',
         'distract': 'distr',
         'swat': 'swat',
         'opener': 'open',

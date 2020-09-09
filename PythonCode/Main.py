@@ -45,6 +45,16 @@ def main():
     except Exception as e:
         raise e
 
+def stuff():
+    serdev = SerialDevice()
+    scarabot = Scara(serdev)
+    cam = Camera()
+    spkr = Speaker()
+
+    scarabot.user_zero()
+    cam.start_camera()
+
+    scarabot.send_gcode('butter.g')
 
 if __name__=='__main__':
     main()
