@@ -19,11 +19,17 @@ class Camera(object):
         self.pre_move_img = None
         self.is_enabled = False
 
+        # pic dump stuff
+        self.pic_series = 0
+        self.pic_type = ''
+
     def locate_user_move_prep(self):
+        self.pic_type = 'pre'
         image = self._capture_image()
         self.pre_move_img = self.preprocess_image(image)
 
     def locate_user_move(self, free_spaces):
+        self.pic_type = 'post'
         image = self._capture_image()
         processed_img_new = self.preprocess_image(image)
 
@@ -36,12 +42,16 @@ class Camera(object):
             oldimg_crop = self.pre_move_img[zone_x - box_width:zone_x + box_width, zone_y - box_height:zone_y + box_height]
             zonediff = np.sum(cv2.absdiff(newimg_crop, oldimg_crop)) / (cfg.TAC_BOX_X * cfg.TAC_BOX_Y)
 
+            if cfg.DEBUG_MODE:
+                debug_save_img(cv2.absdiff(newimg_crop, oldimg_crop), '{}_diff_zone{}.jpg'.format(self.pic_series, i))
+
             print(i, zonediff)
 
             if zonediff > maxdiff and free_spaces[i] == True:
                 maxdiff = zonediff
                 zone = i
 
+        self.pic_series += 1
         return zone
 
     def identify_motion(self):
@@ -91,10 +101,14 @@ class Camera(object):
 
     def preprocess_image(self, img):
         # Greyscale and blur
+        if cfg.DEBUG_MODE:
+            debug_save_img(img, '{}_{}_raw.jpg'.format(self.pic_series, self.pic_type))
+
         gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
         blur = cv2.GaussianBlur(gray,(5,5),0)
+
         if cfg.DEBUG_MODE:
-            debug_save_img(blur, 'rawimg.jpg')
+            debug_save_img(blur, '{}_{}_blur.jpg'.format(self.pic_series, self.pic_type))
 
         # Transform image perspective
         pts1 = np.float32([cfg.p0, cfg.p1, cfg.p2, cfg.p3])
@@ -102,7 +116,7 @@ class Camera(object):
         M = cv2.getPerspectiveTransform(pts1,pts2)
         blur_crop = cv2.warpPerspective(blur,M,(cfg.POST_TRANSFORM_RES[0],cfg.POST_TRANSFORM_RES[1]))
         if cfg.DEBUG_MODE:
-            debug_save_img(blur_crop, 'transformed.jpg')
+            debug_save_img(blur_crop, '{}_{}_transform.jpg'.format(self.pic_series, self.pic_type))
 
         return blur_crop
 
@@ -114,7 +128,7 @@ class Camera(object):
 
 def debug_save_img(img, imgname):
     im = Image.fromarray(img)
-    im.save(os.path.join('/home/pi/', imgname))
+    im.save(os.path.join('/home/pi/imgs', imgname))
 
 
 if __name__=='__main__':
