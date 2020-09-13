@@ -48,29 +48,21 @@ def main():
 def stuff():
     serdev = SerialDevice()
     scarabot = Scara(serdev)
-    # cam = Camera()
+    cam = Camera()
     spkr = Speaker()
 
     scarabot.user_zero()
-    # cam.start_camera()
+    cam.start_camera()
     scarabot.unpark()
     scarabot.draw_board()
     scarabot.draw_move(Move(xindex=0, yindex=0))
-    scarabot.park()
-
-    _ = input('waiting')
-
-    scarabot.unpark()
     scarabot.draw_move(Move(xindex=1, yindex=0))
-    scarabot.draw_move(Move(xindex=2, yindex=0))
-    scarabot.draw_move(Move(xindex=0, yindex=1))
-    scarabot.draw_move(Move(xindex=1, yindex=1))
     scarabot.draw_move(Move(xindex=2, yindex=1))
     scarabot.draw_move(Move(xindex=0, yindex=2))
-    scarabot.draw_move(Move(xindex=1, yindex=2))
-    scarabot.draw_move(Move(xindex=2, yindex=2))
 
-    spkr.play_taunt()
+    while True:
+        _ = input('wait')
+        swat(cam, bot, spkr)
 
 
 if __name__=='__main__':
