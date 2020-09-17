@@ -1,5 +1,5 @@
 # TicTacToe-Bot
 Its a robot that plays tic tac toe.....
 
-## Notes for my brain
-Digipot address:  ‘0101 11’b + A0
+## NOTE
+I'm aware this readme is useless. I'll be updating it soon, stay tuned!
