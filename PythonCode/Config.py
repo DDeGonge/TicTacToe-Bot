@@ -1,3 +1,7 @@
+""" DEBUG PARAMS """
+DEBUG_MODE = False
+
+
 """ MECHANICAL PARAMETERS """
 s0_step_per_rev = 5760
 s1_step_per_rev = 3200
@@ -53,6 +57,7 @@ TAC_BOX_CENTERS = [
 TAC_BOX_X = 90
 TAC_BOX_Y = 90
 
+
 """ OPENCV PARAMETERS """
 MOTION_MIN_CHANGE = 1.0
 
@@ -77,6 +82,3 @@ Feather_Parameter_Chars = {
     'g': pen_up_pwm,
     'h': pen_dn_pwm
 }
-
-""" DEBUG PARAMS """
-DEBUG_MODE = True

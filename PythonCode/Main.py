@@ -45,26 +45,6 @@ def main():
     except Exception as e:
         raise e
 
-def stuff():
-    serdev = SerialDevice()
-    scarabot = Scara(serdev)
-    cam = Camera()
-    spkr = Speaker()
-
-    scarabot.user_zero()
-    cam.start_camera()
-    scarabot.unpark()
-    scarabot.draw_board()
-    scarabot.draw_move(Move(xindex=0, yindex=0))
-    scarabot.draw_move(Move(xindex=1, yindex=0))
-    scarabot.draw_move(Move(xindex=2, yindex=1))
-    scarabot.draw_move(Move(xindex=0, yindex=2))
-
-    while True:
-        _ = input('wait')
-        swat(cam, bot, spkr)
-
 
 if __name__=='__main__':
     # main()
-    stuff()

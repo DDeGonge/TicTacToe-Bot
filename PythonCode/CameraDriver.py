@@ -43,9 +43,8 @@ class Camera(object):
             zonediff = np.sum(cv2.absdiff(newimg_crop, oldimg_crop)) / (cfg.TAC_BOX_X * cfg.TAC_BOX_Y)
 
             if cfg.DEBUG_MODE:
+                print(i, zonediff)
                 debug_save_img(cv2.absdiff(newimg_crop, oldimg_crop), '{}_diff_zone{}.jpg'.format(self.pic_series, i))
-
-            print(i, zonediff)
 
             if zonediff > maxdiff and free_spaces[i] == True:
                 maxdiff = zonediff
